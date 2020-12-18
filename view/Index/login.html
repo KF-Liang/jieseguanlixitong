@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>用户登录</title>
+
+	<link rel="stylesheet" type="text/css" href="__static__/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript" src="__static__/js/bootstrap.min.js"></script>
+</head>
+<style type="text/css">
+	body{
+		background-color: silver;
+	}
+	@media screen and (max-width: 992px) and (min-width: 768px) {
+			body{
+				background-color: darkseagreen;
+			}
+			h1{
+				font-size: 100px;
+			}
+			p{
+				font-size: 40px;
+			}
+        
+        }
+</style>
+<body>
+<h1 align="center">用户登录</h1>
+<p style="text-align: center; color: red;">{$mes}</p>
+<form class="form-horizontal" method="POST" action="tologin">
+	<div class="form-group">
+	  <label for="inputEmail3" class="col-sm-2 control-label col-lg-2">用户名</label>
+	  <div class="col-md-8 col-xs-12">
+		<input type="text" class="form-control" id="inputEmail3" placeholder="name" name="name">
+	  </div>
+	</div>
+	<div class="form-group">
+	  <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+	  <div class="col-md-8 col-xs-12">
+		<input type="password" class="form-control" id="inputPassword3" placeholder="Password" name="password">
+	  </div>
+	</div>
+	<div class="form-group col">
+		<label for="inputPassword3" class="col-sm-2 control-label">验证码</label>
+		<div class="col-xs-12 col-md-6">
+		  <input type="text" class="form-control col-sm-8" id="inputPassword3" placeholder="Password" name="captcha">
+		</div>
+		<div><img src="{:captcha_src()}" onclick="this.src='{:captcha_src()}?id='+Math.random()+''" alt="captcha" class="col-xs-12 col-md-2" style="height:55px;" /></div>
+	  </div>
+	<div class="form-group">
+	  <div class="col-xs-offset-0 col-md-offset-2">
+		<button type="submit" class="btn btn-primary col-xs-12 col-md-4" st>登陆</button>
+	  </div>
+	</div>
+  </form>
+
+
+</body>
+</html>

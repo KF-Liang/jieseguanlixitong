@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>主页</title>
+</head>
+<link rel="stylesheet" type="text/css" href="__static__/css/bootstrap.min.css">
+<style type="text/css">
+		.t{
+			width: 1000px;
+			margin: 0 auto;
+		}
+		body{
+				background-color: darkgrey;
+			}
+		.box{ 
+			width: 1000px;
+			height: 200px;
+			margin: 40px auto;
+			background-color: pink;
+		}
+		.box img{
+			width: 200px;
+			height: 200px;	
+			float: left;
+		}
+		.box2{
+			width: 800px;
+			height: 200px;
+			float: left;
+			background-color: deepskyblue;
+		}
+		.box2inner{
+			float: right;
+			background-color: forestgreen;
+			width: 250px;
+			height: 35px;
+		}
+		p{
+			font-size: 15px;
+		}
+        @media screen and (max-width: 992px) and (min-width: 768px) {
+			body{
+				background-color: darkseagreen;
+			}
+            .t{
+			width: 100%;	
+		   }
+        }
+	</style>
+<script src="__static__/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="__static__/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+		$(function () {
+			$('#carousel-example-generic').carousel({
+				interval:1000,
+			});
+
+    $.ajax({
+      type: "get",
+      dataType: "json",
+      url: "/list",
+      success: function (result) {
+		  var l="";
+		  //var c in result
+		for (var c=0;c<result.length;c++) {
+			console.log(c);
+		 l +='<div class="out">\
+     <div class="box" id="box_'+result[c].id+'">\
+		<img src="__static__/image/a.jpg"/>\
+		<div class="box2">\
+			<h1 align="center">'+result[c].head+'</h1>\
+			<p>'+result[c].content+'</p>\
+		</div>\
+		<div class="box2inner">\
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="find('+result[c].id+')" style="width: 80px;">查看</button>\
+			<button type="button" class="btn btn-danger" onclick="del('+result[c].id+')" style="width: 80px;">删除</button>\
+			<button type="button" class="btn btn-info" onclick="xiugai('+result[c].id+')" data-toggle="modal" data-target="#myModal2" style="width: 80px;">修改</button>\
+		</div>\
+	</div>';
+ }
+ $(".out").append(l);
+      }
+    });
+});
+
+function del(id){
+	var b = confirm("是否要删除这篇文章");
+	console.log("是否"+b);
+	if(b){
+		// alert(b);
+		$.ajax({
+      type: "get",
+      dataType: "json",
+      url: "./del/id/"+id,
+      success: function (result) {
+		 	if(result==1){
+				$("#box_"+id).remove();//主要就是这个删除成功后移除这行数据
+				// window.location.reload();
+			 }else{
+				 alert("删除失败");
+			 }
+	  }
+	  });
+	}
+};
+
+function find(id){
+	$.ajax({
+      type: "get",
+      dataType: "json",
+      url: "./find/id/"+id,
+      success: function (result) {
+		 	$('#myModalLabel').text("题目:   "+result.head);
+			 $('.modal-body').text(result.content);
+	  }
+	  });
+}
+//在前端中显示信息
+function xiugai(id){
+	$.ajax({
+      type: "get",
+      dataType: "json",
+      url: "./find/id/"+id,
+      success: function (result) {
+		 	$('#exampleInputEmail1').val(result.head);
+			 $('#exampletext').text(result.content);
+			 $('#hidden1').val(result.id);
+	  }
+	  });
+} 
+
+
+
+
+</script>
+
+<body>
+	<div id="carousel-example-generic" class="carousel t"   data-ride="carousel">
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+		  <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+		  <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+		  <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+		  <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+		</ol>
+	  
+		<!-- Wrapper for slides -->
+		<div class="carousel-inner"  strole="listbox">
+		  <div class="item active">
+			<img style="width: 980px;height: 551.25px;" src="__static__/image/1.jpg"   alt="图1">
+			<div class="carousel-caption">
+				这是图片1
+			</div>
+		  </div>
+		  <div class="item">
+			<img style="width: 980px;height: 551.25px;" src="__static__/image/2.jpg" alt="图2">
+			<div class="carousel-caption">
+				我家的猫
+			</div>
+		  </div>
+		  <div class="item">
+			<img style="width: 980px;height: 551.25px;" src="__static__/image/3.jpg" alt="图3">
+		  </div>
+		  <div class="item">
+			<img style="width: 980px;height: 551.25px;" src="__static__/image/4.jpg" alt="图4">
+		  </div>
+		</div>
+	  </div>
+	  <h1 align="center">戒色管理系统</h1>
+<div class="out"></div>
+	 
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true"> 
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4>
+            </div>
+            <div class="modal-body">在这里添加一些文本</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <!-- <button type="button" class="btn btn-primary">提交更改</button> -->
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!--修改的模态框-->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true"> 
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">修改戒色文章</h4>
+            </div>
+            <div class="modal-body">
+				<form action="./update" method="POST">
+					<input type="hidden" id="hidden1" name="id">
+					<div class="form-group">
+						<label for="exampleInputEmail1">标题</label>
+						<input type="text" class="form-control" id="exampleInputEmail1" name="head">
+					  </div>
+					  <div class="form-group">
+						<label for="exampleInputPassword1">内容</label>
+						<textarea name="content" class="form-control" id="exampletext" rows="10">xxxxxxxxxxxxxx</textarea>
+					  </div>
+					  <button type="submit" class="btn btn-primary">修改</button>
+				</form>
+			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <!-- <button type="button" class="btn btn-primary">提交更改</button> -->
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</body> 
+
+</html>
